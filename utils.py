@@ -170,10 +170,13 @@ def compare_results(function, test_results, parameter_name, list_of_values, **ot
         print("{cur}/{num}: {t}".format(cur=i+1, num=len(list_of_values), t=strftime("%Y-%m-%d %H:%M:%S", localtime())))
         other_parameters[parameter_name] = value        
         predicted_results = function(**other_parameters)
-        np.save("src/Logs/{date}_predicted_coordinates_{function_name}_{parameter_name}_".format(
-                date=strftime("%Y%m%d", localtime()), function_name=function.__name__, parameter_name=parameter_name)
+        np.save("src/Logs/{date}_{points_num}_predicted_coordinates_{function_name}_{parameter_name}_".format(
+                date=strftime("%Y%m%d", localtime()), points_num=other_parameters['points_to_compare'],
+                function_name=function.__name__, parameter_name=parameter_name)
                 + str(value), predicted_results)
-        result.append(score(test_results, predicted_results, baseline(other_parameters['test_data'], start_point_index=2)))
+        result.append(score(test_results[:other_parameters['points_to_compare']], predicted_results,
+                            baseline(other_parameters['test_data'], start_point_index=2,
+                                     number_of_points_to_return=other_parameters['points_to_compare'])))
         
     print("done! {time}".format(time=strftime("%Y-%m-%d %H:%M:%S", localtime())))
     print("Results: {}".format(result))
@@ -185,7 +188,7 @@ def compare_results(function, test_results, parameter_name, list_of_values, **ot
 
     plt.ylabel('Score')
     plt.xlabel(parameter_name)
-    plt.title("Difference between real points and predicted by {parameter_name} in {function_name}".format(
+    plt.title("Score for predicted points by {parameter_name} in {function_name}".format(
         function_name=function.__name__, parameter_name=parameter_name))
     plt.xticks(np.array(range(number)) + width/2, ind)
     plt.savefig("src/Plots/{date}_{function_name}_score_by_{parameter_name}_with_features.png".format(
