@@ -18,8 +18,11 @@ TRAIN_SAMPLE_NUMBER = 257187
 # Filename from index
 ZERO_PADDING = 6
 
-def get_filename(index):
-    return "src/Csv/{}.txt".format(str(index).zfill(ZERO_PADDING))
+def get_filename(index, ext_path=False):
+    if ext_path:
+        return "src/ExtCsv/{}.txt".format(str(index).zfill(ZERO_PADDING))
+    else:
+        return "src/Csv/{}.txt".format(str(index).zfill(ZERO_PADDING))
 
 def get_framename(index):
     return "src/Frame/{}.jpg".format(str(index).zfill(ZERO_PADDING))
@@ -28,10 +31,10 @@ def get_framename(index):
 # Pedestrian info
 NUMBER_OF_PEDESTRIANS = 12273
 
-def download_pedestrian(index):
+def download_pedestrian(index, ext_path=False):
     assert(0 <= index < NUMBER_OF_PEDESTRIANS), "pedestrian number should be between 0 and {max}; given number: {id}".format(
         max=NUMBER_OF_PEDESTRIANS-1, id=index)
-    filename = get_filename(index)
+    filename = get_filename(index, ext_path)
     data = pd.read_csv(filename, index_col=0)
     return data
 
@@ -212,7 +215,7 @@ def draw_lines(frame_number, paths, colors, image_name, draw_line=True):
     im.save("src/Images/{name}.jpg".format(name=image_name))
     
     
-def find_by_path(path, search_in_test=True):
+def find_by_path(path, search_in_test=True, ext_path=False):
     
     indices = np.arange(NUMBER_OF_PEDESTRIANS)
     if search_in_test:
@@ -223,7 +226,8 @@ def find_by_path(path, search_in_test=True):
     len2 = len(path)
         
     for i in indices:
-        df = download_pedestrian(i)
+        df = download_pedestrian(i, ext_path)
+
         data = np.array(df).flatten()
         len1 = len(data)
         data_view = np.lib.stride_tricks.as_strided(data, shape=(len1 - len2 + 1, len2),
