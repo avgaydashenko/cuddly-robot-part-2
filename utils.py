@@ -326,3 +326,15 @@ def read_data():
     train_data = train_data[:5]
     
     return (train_data, train_results, test_data, test_results)
+
+def get_mse(prediction, truth):
+    pred = prediction
+    tr = truth    
+    
+    pred[:,::2] /= FRAME_WIDTH
+    pred[:,1::2] /= FRAME_HEIGHT
+    
+    M = pred.shape[0]
+    N = int(pred.shape[1] / 2)
+    tmp = np.power(tr - pred, 2)
+    return np.sum(np.sqrt(tmp[:,::2] + tmp[:,1::2])) * 100 / M / N
