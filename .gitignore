@@ -90,8 +90,6 @@ ENV/
 
 # Dataset folders
 src/Frame
-src/ExtCsv
 
 # Log folders
 src/Logs
-src/Plots
