@@ -90,6 +90,7 @@ ENV/
 
 # Dataset folders
 src/Frame
+src/pedestrians_location.npy
 
 # Log folders
 src/Logs
