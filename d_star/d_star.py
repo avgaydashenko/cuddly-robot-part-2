@@ -9,6 +9,7 @@ from queue import PriorityQueue
 class DStar:
     STRAIGHT_DIST = 1
     DIAGONAL_DIST = sqrt(2)
+    MAX_STEPS = 8000
 
     @classmethod
     def heuristic(cls, a, b):
@@ -208,9 +209,15 @@ class DStar:
         if self.open_list.empty():
             return 1
 
+        k = 0
+
         self.s_start = self.calculate_key(self.s_start)
         while not self.open_list.empty() and self.open_list.queue[0] < self.s_start \
                 or self.get_rhs(self.s_start) != self.get_g(self.s_start):
+
+            if k > self.MAX_STEPS:
+                return -1
+            k += 1
 
             test = self.get_rhs(self.s_start) != self.get_g(self.s_start)
 

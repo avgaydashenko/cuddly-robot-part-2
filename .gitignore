@@ -94,3 +94,6 @@ src/pedestrians_location.npy
 
 # Log folders
 src/Logs
+
+# PyCharm
+.idea/
