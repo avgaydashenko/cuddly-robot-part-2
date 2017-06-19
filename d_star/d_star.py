@@ -9,7 +9,7 @@ from queue import PriorityQueue
 class DStar:
     STRAIGHT_DIST = 1
     DIAGONAL_DIST = sqrt(2)
-    MAX_STEPS = 70
+    MAX_STEPS = 1000
 
     @classmethod
     def heuristic(cls, a, b):
